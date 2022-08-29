@@ -1,0 +1,11 @@
+{
+    "discord": {
+        "webhook": "",
+        "embed_color": "",
+        "footer": {
+            "text": "",
+            "icon_url": ""
+        }
+    },
+    "country_code": ""
+}

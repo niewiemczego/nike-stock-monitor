@@ -1,7 +1,9 @@
-from typing import Optional, Dict, List
+from typing import Dict, List, Optional
+
 import requests
 
 from webhook import send_webhook
+
 
 class NikeStock:
     def __init__(self, country_code: str, language: str, upcoming: Optional[str] = "true"):
