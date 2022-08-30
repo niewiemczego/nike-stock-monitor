@@ -2,12 +2,10 @@ from typing import Any
 
 from discord_webhook import DiscordEmbed, DiscordWebhook
 
-from main import Release
 
-
-def send_webhook(settings_data: dict[str, Any], release: Release):
+def send_webhook(webhook_url: str, release):
     webhook = DiscordWebhook(
-        url="webhook_url"
+        url=webhook_url
     ) 
     embed = DiscordEmbed(color="92A9BD")
     embed.set_thumbnail(url=release.image)

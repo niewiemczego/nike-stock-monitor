@@ -2,8 +2,8 @@ from typing import Any
 
 import requests
 
-from countries import Countries
-from custom_exceptions import CountryNotFound
+from .countries import countries
+from .custom_exceptions import CountryNotFound
 
 
 class Scraper:
@@ -14,12 +14,10 @@ class Scraper:
         self.upcoming = upcoming
     
     def create_api_url(self) -> str:
-        try:
-            api_url = f"{self.BASE_URL}/?anchor=0&count=50&filter=marketplace%28{self.country_code}%29&filter=language%28{Countries[self.country_code].value}%29&filter=upcoming%28{self.upcoming}%29&filter=channelId%28010794e5-35fe-4e32-aaff-cd2c74f89d61%29&filter=exclusiveAccess%28true%2Cfalse%29&sort=effectiveStartSellDateAsc"
-        except KeyError:
+        language = countries.get(self.country_code, "")
+        if language == "":
             raise CountryNotFound(f"The given country({self.country_code}) has not been found!")
-        else:
-            return api_url
+        return f"{self.BASE_URL}/?anchor=0&count=50&filter=marketplace%28{self.country_code}%29&filter=language%28{language}%29&filter=upcoming%28{self.upcoming}%29&filter=channelId%28010794e5-35fe-4e32-aaff-cd2c74f89d61%29&filter=exclusiveAccess%28true%2Cfalse%29&sort=effectiveStartSellDateAsc"
 
     def fetch(self) -> dict[str, Any]:
         headers = {

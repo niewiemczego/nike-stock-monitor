@@ -1,27 +1,18 @@
 import random
 import time
-from dataclasses import dataclass
 from typing import Any
 
-from scraper import Scraper
-from webhook import send_webhook
+from .release import Release
+from .release_webhook import send_webhook
+from .scraper import Scraper
 
 
-@dataclass
-class Release:
-    sku: str
-    exclusive_access: bool
-    title: str
-    price: float
-    currency: str
-    type: str
-    date: str
-    image: str
-    sizes_with_stock: list[str]
-
-class Monitor(Scraper):
-    def __init__(self, country_code: str, upcoming: str = "true"):
-        super().__init__(country_code, upcoming)
+class Monitor:
+    def __init__(self, webhook_url: str, country_code: str, upcoming: str = "true"):
+        self.webhook_url = webhook_url
+        self.country_code = country_code.upper()
+        self.upcoming = upcoming
+        self.scraper = Scraper(self.country_code, self.upcoming)
 
     def get_sizes_and_stock_details(self, release_detail: dict[str, Any]) -> list[str]:
         sizes_with_stock = []
@@ -39,7 +30,7 @@ class Monitor(Scraper):
     
     def get_release_details(self) -> list[Release]:
         specified_releases = []
-        releases = self.fetch()
+        releases = self.scraper.fetch()
 
         release: dict[str, Any]
         for release in releases:
@@ -73,14 +64,18 @@ class Monitor(Scraper):
                 )
         return specified_releases
 
-    def main(self):
+    def run(self):
+        print(f"RUNNING [{self.country_code}] MONITOR!")
         specified_releases = self.get_release_details()
         for specified_release in specified_releases:
-            send_webhook(specified_release)
+            print(f"SENDING RELEASE DETAILS[{self.country_code}] TO WEBHOOK: sku - {specified_release.sku}")
+            send_webhook(self.webhook_url, specified_release)
             time.sleep(random.uniform(2.5, 5.5))
 
 
 if __name__ == "__main__":
-    monitor = Monitor("PL")
-    essa = monitor.get_release_details()
-    print(essa)
+    monitor = Monitor(
+        "https://discord.com/api/webhooks/965556784544763936/LPriyjQX4Eoc3AVMgJNw6FuC7Ym6y7kN8L7-QFCq4hp8Bi3cL_SFkXOVXZvSV8toeBfh",
+        "PL"
+    )
+    monitor.run()
