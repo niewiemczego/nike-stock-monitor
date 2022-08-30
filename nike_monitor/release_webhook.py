@@ -2,8 +2,10 @@ from typing import Any
 
 from discord_webhook import DiscordEmbed, DiscordWebhook
 
+from .release import Release
 
-def send_webhook(webhook_url: str, release):
+
+def send_webhook(webhook_url: str, release: Release):
     webhook = DiscordWebhook(
         url=webhook_url
     ) 

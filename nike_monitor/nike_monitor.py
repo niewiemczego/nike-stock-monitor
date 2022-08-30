@@ -71,11 +71,3 @@ class Monitor:
             print(f"SENDING RELEASE DETAILS[{self.country_code}] TO WEBHOOK: sku - {specified_release.sku}")
             send_webhook(self.webhook_url, specified_release)
             time.sleep(random.uniform(2.5, 5.5))
-
-
-if __name__ == "__main__":
-    monitor = Monitor(
-        "https://discord.com/api/webhooks/965556784544763936/LPriyjQX4Eoc3AVMgJNw6FuC7Ym6y7kN8L7-QFCq4hp8Bi3cL_SFkXOVXZvSV8toeBfh",
-        "PL"
-    )
-    monitor.run()
