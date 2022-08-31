@@ -5,8 +5,8 @@ from nike_monitor.nike_monitor import Monitor
 
 def main():
     monitors = {
-        "PL": "https://discord.com/api/webhooks/965556784544763936/LPriyjQX4Eoc3AVMgJNw6FuC7Ym6y7kN8L7-QFCq4hp8Bi3cL_SFkXOVXZvSV8toeBfh",
-        "DE": "https://discord.com/api/webhooks/965556784544763936/LPriyjQX4Eoc3AVMgJNw6FuC7Ym6y7kN8L7-QFCq4hp8Bi3cL_SFkXOVXZvSV8toeBfh",
+        "PL": "webhook-url",
+        "DE": "webhook-url",
     }
     threads = []
 
