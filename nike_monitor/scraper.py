@@ -14,12 +14,18 @@ class Scraper:
         self.upcoming = upcoming
 
     def create_api_url(self) -> str:
+        """
+        It creates a URL for the API call.
+        """
         language = countries.get(self.country_code, "")
-        if language == "":
+        if not language:
             raise CountryNotFound(f"The given country({self.country_code}) has not been found!")
         return f"{self.BASE_URL}/?anchor=0&count=50&filter=marketplace%28{self.country_code}%29&filter=language%28{language}%29&filter=upcoming%28{self.upcoming}%29&filter=channelId%28010794e5-35fe-4e32-aaff-cd2c74f89d61%29&filter=exclusiveAccess%28true%2Cfalse%29&sort=effectiveStartSellDateAsc"
 
     def fetch(self) -> dict[str, Any]:
+        """
+        It fetches data from the API and returns it as a dictionary
+        """
         headers = {
             'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
             'accept-encoding': 'gzip, deflate, br',

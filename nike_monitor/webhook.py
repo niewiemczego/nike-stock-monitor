@@ -6,6 +6,15 @@ from .release import Release
 
 
 def send_webhook(webhook_url: str, release: Release):
+    """
+    > The function takes a webhook URL and a release object as arguments, and sends a Discord webhook to
+    the URL with the release object's data
+    
+    :param webhook_url: The webhook URL you got from Discord
+    :type webhook_url: str
+    :param release: Release
+    :type release: Release
+    """
     webhook = DiscordWebhook(
         url=webhook_url
     ) 
