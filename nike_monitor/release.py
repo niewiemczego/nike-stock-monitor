@@ -3,6 +3,7 @@ from dataclasses import dataclass
 
 @dataclass
 class Release:
+    url: str
     sku: str
     exclusive_access: bool
     title: str

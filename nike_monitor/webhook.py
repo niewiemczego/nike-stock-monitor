@@ -6,6 +6,15 @@ from .release import Release
 
 
 def send_webhook(webhook_url: str, release: Release):
+    """
+    > The function takes a webhook URL and a release object as arguments, and sends a Discord webhook to
+    the URL with the release object's data
+    
+    :param webhook_url: The webhook URL you got from Discord
+    :type webhook_url: str
+    :param release: Release
+    :type release: Release
+    """
     webhook = DiscordWebhook(
         url=webhook_url
     ) 
@@ -13,7 +22,7 @@ def send_webhook(webhook_url: str, release: Release):
     embed.set_thumbnail(url=release.image)
     embed.add_embed_field(
         name="**Product Name**", 
-        value=release.title, 
+        value=f"[{release.title}]({release.url})", 
         inline=False
     )
     embed.add_embed_field(
