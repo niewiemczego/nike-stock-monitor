@@ -13,7 +13,7 @@ def send_webhook(webhook_url: str, release: Release):
     embed.set_thumbnail(url=release.image)
     embed.add_embed_field(
         name="**Product Name**", 
-        value=release.title, 
+        value=f"[{release.title}]({release.url})", 
         inline=False
     )
     embed.add_embed_field(

@@ -44,6 +44,7 @@ class Monitor:
                 type = release_detail[0].get('launchView', {}).get('method', 'TBA')
                 date = release_detail[0].get('launchView', {}).get('startEntryDate', 'TBA')
                 sku = release_detail[0].get('merchProduct', {}).get('styleColor', '')
+                slug = release['publishedContent']['properties']['seo']['slug']
                 try:
                     image = release['publishedContent']['nodes'][0]['nodes'][0]['properties']['portrait']['url']
                 except KeyError:
@@ -51,6 +52,7 @@ class Monitor:
                 sizes_with_stock = self.get_sizes_and_stock_details(release_detail[0])
                 specified_releases.append(
                     Release(
+                        f"https://www.nike.com/{self.country_code.lower()}/launch/t/{slug}",
                         sku,
                         exclusive_access,
                         title,
