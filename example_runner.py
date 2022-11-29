@@ -6,7 +6,7 @@ from nike_monitor.nike_monitor import Monitor
 def main():
     monitors = {
         "PL": "webhook-url",
-        "DE": "webhook-url",
+        "US": "webhook-url",
     }
     threads = []
 

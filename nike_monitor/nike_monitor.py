@@ -1,7 +1,9 @@
-import os
 import random
 import time
+from pathlib import Path
 from typing import Any
+
+import dateutil.parser
 
 from .custom_exceptions import WrongWebhookURL
 from .release import Release
@@ -11,6 +13,13 @@ from .webhook import send_webhook
 
 
 class Monitor:
+    stock_indicator = {
+        "OOS": ":red_circle:",
+        "LOW": ":yellow_circle:",
+        "MEDIUM": ":orange_circle:",
+        "HIGH": ":green_circle:",
+    }
+    
     def __init__(self, webhook_url: str, country_code: str, check_delay: int = 60, upcoming: str = "true"):
         self.webhook_url = webhook_url
         self.country_code = country_code.upper()
@@ -30,7 +39,7 @@ class Monitor:
                 size = detail['countrySpecifications'][0]['localizedSize'] + detail['countrySpecifications'][0]['localizedSizePrefix']
             except KeyError:
                 size = detail['countrySpecifications'][0]['localizedSize']
-            sizes_with_stock.append(f"{stock} - {size}")
+            sizes_with_stock.append(f"{self.stock_indicator.get(stock.upper())}{stock} - {size}")
         return sizes_with_stock
 
     def get_release_details(self) -> list[Release]:
@@ -48,6 +57,8 @@ class Monitor:
                 currency = release_detail[0].get('merchPrice', {}).get('currency', '')
                 type = release_detail[0].get('launchView', {}).get('method', 'TBA')
                 date = release_detail[0].get('launchView', {}).get('startEntryDate', 'TBA')
+                if date != 'TBA':
+                    date = str(dateutil.parser.parse(date, ignoretz=True))
                 sku = release_detail[0].get('merchProduct', {}).get('styleColor', '')
                 slug = release['publishedContent']['properties']['seo']['slug']
                 try:
@@ -75,11 +86,12 @@ class Monitor:
         print(f"RUNNING [{self.country_code}] MONITOR!")
         while 1:
             specified_releases = self.get_release_details()
-            already_sent = read_file_by(f"{os.path.dirname(os.path.abspath(__file__))}/already_sent/{self.country_code.lower()}.txt")
+            print()
+            already_sent = read_file_by(f"{Path.cwd()}/already_sent/{self.country_code.lower()}.txt")
             for specified_release in specified_releases:
                 if specified_release.sku not in already_sent:
                     print(f"SENDING RELEASE DETAILS[{self.country_code}] TO WEBHOOK: sku - {specified_release.sku}")
-                    append_to_file(f"{os.path.dirname(os.path.abspath(__file__))}/already_sent/{self.country_code.lower()}.txt", specified_release.sku)
+                    append_to_file(f"{Path.cwd()}/already_sent/{self.country_code.lower()}.txt", specified_release.sku)
                     send_webhook(self.webhook_url, specified_release)
                     time.sleep(random.uniform(2.5, 5.5))
             print(f"SLEEPING FOR {self.check_delay} MINS")
