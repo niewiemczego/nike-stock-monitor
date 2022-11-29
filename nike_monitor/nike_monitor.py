@@ -14,6 +14,7 @@ from .webhook import send_webhook
 
 class Monitor:
     stock_indicator = {
+        "TBA": ":black_circle:",
         "OOS": ":red_circle:",
         "LOW": ":yellow_circle:",
         "MEDIUM": ":orange_circle:",
